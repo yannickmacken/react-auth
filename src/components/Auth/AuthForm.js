@@ -23,6 +23,7 @@ const AuthForm = () => {
 
     } else {
       console.log(enteredEmail, enteredPassword)
+      fetch('https://identitytoolkit.googleapis.com/v1/accounts:signInWithCustomToken?key=[API_KEY]')
     }
   }
 
