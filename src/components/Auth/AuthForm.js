@@ -23,6 +23,7 @@ const AuthForm = () => {
 
     } else {
       console.log(enteredEmail, enteredPassword)
+      const apiKey = process.env.REACT_APP_API_KEY
       fetch('https://identitytoolkit.googleapis.com/v1/accounts:signInWithCustomToken?key=[API_KEY]')
     }
   }
