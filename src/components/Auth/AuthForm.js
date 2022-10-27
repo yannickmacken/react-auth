@@ -24,14 +24,32 @@ const AuthForm = () => {
     } else {
       console.log(enteredEmail, enteredPassword)
       const apiKey = process.env.REACT_APP_API_KEY
-      fetch('https://identitytoolkit.googleapis.com/v1/accounts:signInWithCustomToken?key=[API_KEY]')
+      fetch(
+        'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=' + apiKey, 
+        {
+          method: 'POST',
+          body: JSON.stringify({
+            email: enteredEmail,
+            password: enteredPassword,
+            returnSecureToken: true
+          }),
+          headers: {'Content-type': 'application/json'}
+        }
+      ).then(res => {
+        if (res.ok) {
+          console.log('succes')
+        } else {
+          console.log(res)
+          }
+        }
+      )
     }
   }
 
   return (
     <section className={classes.auth}>
       <h1>{isLogin ? 'Login' : 'Sign Up'}</h1>
-      <form>
+      <form onSubmit={submitHandler}>
         <div className={classes.control}>
           <label htmlFor='email'>Your Email</label>
           <input type='email' id='email' required ref={emailInputRef}/>
@@ -41,7 +59,7 @@ const AuthForm = () => {
           <input type='password' id='password' required ref={passwordInputRef}/>
         </div>
         <div className={classes.actions}>
-          <button onClick={submitHandler}>{isLogin ? 'Login' : 'Create Account'}</button>
+          <button>{isLogin ? 'Login' : 'Create Account'}</button>
           <button
             type='button'
             className={classes.toggle}
