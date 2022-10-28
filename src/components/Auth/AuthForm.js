@@ -1,10 +1,15 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useContext } from 'react';
 
 import classes from './AuthForm.module.css';
+import TokenContext from '../../store/context'
+
 
 const AuthForm = () => {
   const emailInputRef = useRef()
   const passwordInputRef = useRef()
+
+  const [token, setToken] = useContext(TokenContext)
+  console.log(token)
 
   const [isLogin, setIsLogin] = useState(true)
   const [isLoading, setIsLoading] = useState(false)
@@ -17,38 +22,49 @@ const AuthForm = () => {
     event.preventDefault()
     setIsLoading(true)
     
+    // Get filled email and password
     const enteredEmail = emailInputRef.current.value
     const enteredPassword = passwordInputRef.current.value
 
     // Add validation
 
+    // Set url to login or signup
+    let url = ''
     if (isLogin) {
+      url = 'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key='
       setIsLoading(false)
     } else {
-      console.log(enteredEmail, enteredPassword)
-      const apiKey = process.env.REACT_APP_API_KEY
-      fetch(
-        'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=' + apiKey, 
-        {
-          method: 'POST',
-          body: JSON.stringify({
-            email: enteredEmail,
-            password: enteredPassword,
-            returnSecureToken: true
-          }),
-          headers: {'Content-type': 'application/json'}
-        }
-      ).then(res => {
-        setIsLoading(false)
-        if (res.ok) {
-          console.log('succes')
-        } else {
-          console.log(res)
-          }
-        }
-      )
+      url = 'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key='
     }
+
+    // Post login or signup details to url
+    console.log(enteredEmail, enteredPassword)
+    const apiKey = process.env.REACT_APP_API_KEY
+    fetch(
+      url + apiKey, 
+      {
+        method: 'POST',
+        body: JSON.stringify({
+          email: enteredEmail,
+          password: enteredPassword,
+          returnSecureToken: true
+        }),
+        headers: {'Content-type': 'application/json'}
+      }
+    ).then(res => {
+      console.log(res)
+      setToken(res.idToken)
+      setIsLoading(false)
+      if (res.ok) {
+        console.log('succes')
+      } else {
+        console.log(res)
+        }
+      }
+    )
   }
+
+  console.log(token)
 
   return (
     <section className={classes.auth}>
