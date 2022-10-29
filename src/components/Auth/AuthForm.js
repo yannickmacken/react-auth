@@ -9,7 +9,6 @@ const AuthForm = () => {
   const passwordInputRef = useRef()
 
   const [token, setToken] = useContext(TokenContext)
-  console.log(token)
 
   const [isLogin, setIsLogin] = useState(true)
   const [isLoading, setIsLoading] = useState(false)
@@ -32,13 +31,11 @@ const AuthForm = () => {
     let url = ''
     if (isLogin) {
       url = 'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key='
-      setIsLoading(false)
     } else {
       url = 'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key='
     }
 
     // Post login or signup details to url
-    console.log(enteredEmail, enteredPassword)
     const apiKey = process.env.REACT_APP_API_KEY
     fetch(
       url + apiKey, 
@@ -52,19 +49,27 @@ const AuthForm = () => {
         headers: {'Content-type': 'application/json'}
       }
     ).then(res => {
-      console.log(res)
-      setToken(res.idToken)
-      setIsLoading(false)
+
+      // Log result
       if (res.ok) {
         console.log('succes')
       } else {
-        console.log(res)
-        }
+        console.log('failure')
       }
-    )
-  }
 
-  console.log(token)
+      // Set token if login selected
+      if (isLogin) {
+        res.json().then(
+          (data) => {
+            setToken(data.idToken)
+            console.log(data.idToken)
+          })
+      }
+
+      // Set is loading state to false
+      setIsLoading(false)
+    })
+  }
 
   return (
     <section className={classes.auth}>
