@@ -15,19 +15,22 @@ const MainNavigation = () => {
         <div className={classes.logo}>React Auth</div>
       </Link>
       <nav>
-        <ul>
-          {!token && 
-          <li>
-            <Link to='/auth'>Login</Link>
-          </li>
+          {token? 
+            <ul>
+              <li>
+                <Link to='/profile'>Profile</Link>
+              </li>
+              <li>
+                <button>Logout</button>
+              </li>
+            </ul>
+            :
+            <ul>
+              <li>
+                <Link to='/auth'>Login</Link>
+              </li>
+            </ul>
           }
-          <li>
-            <Link to='/profile'>Profile</Link>
-          </li>
-          <li>
-            <button>Logout</button>
-          </li>
-        </ul>
       </nav>
     </header>
   );
