@@ -1,20 +1,20 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useContext } from 'react';
 
-import TokenContext from '../../store/context';
+import AuthContext from '../../store/context';
 import classes from './MainNavigation.module.css';
 
 const MainNavigation = () => {
   
   // Get auth context token
-  const [token, setToken] = useContext(TokenContext)
+  const { token, logout } = useContext(AuthContext)
 
   // Navigate
   let navigate = useNavigate()
 
   // On logout, set token to empty string and navigate home
   function handleClickLogout() {
-    setToken('')
+    logout()
     navigate('/')
   }
 

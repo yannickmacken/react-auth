@@ -2,7 +2,7 @@ import { useState, useRef, useContext } from 'react';
 import { useNavigate } from 'react-router-dom'
 
 import classes from './AuthForm.module.css';
-import TokenContext from '../../store/context'
+import AuthContext from '../../store/context'
 
 
 const AuthForm = () => {
@@ -12,7 +12,7 @@ const AuthForm = () => {
   const passwordInputRef = useRef()
 
   // Auth context
-  const [token, setToken] = useContext(TokenContext)
+  const { login } = useContext(AuthContext)
 
   // States
   const [isLogin, setIsLogin] = useState(true)
@@ -71,8 +71,7 @@ const AuthForm = () => {
       if (isLogin) {
         res.json().then(
           (data) => {
-            setToken(data.idToken)
-            console.log(data.idToken)
+            login(data.idToken)
           })
         navigate("/")
       }

@@ -1,18 +1,18 @@
-import { useState } from 'react';
+import { useContext } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 
 import Layout from './components/Layout/Layout';
 import UserProfile from './components/Profile/UserProfile';
 import AuthPage from './pages/AuthPage';
 import HomePage from './pages/HomePage';
-import TokenContext from './store/context'
+import AuthContext, { AuthContextProvider } from './store/context'
 
 
 function App() {
-  const [token, setToken] = useState('')
+  const { token } = useContext(AuthContext)
 
   return (
-    <TokenContext.Provider value={[token, setToken]}>
+    <AuthContextProvider>
     <Layout>
       <Routes>
         <Route path='/' exact element={<HomePage />}/>
@@ -23,7 +23,7 @@ function App() {
         <Route path='*' element={<Navigate to="/" replace/>} />
       </Routes>
     </Layout>
-    </TokenContext.Provider>
+    </AuthContextProvider>
   );
 }
 
