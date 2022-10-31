@@ -67,11 +67,12 @@ const AuthForm = () => {
         return null
       }
 
-      // Set token if login selected and navigate home
+      // If login, set token and expiration time and navigate home
       if (isLogin) {
         res.json().then(
           (data) => {
-            login(data.idToken)
+            const expirationTime = new Date(new Date().getTime() + data.expiresIn * 1000)
+            login(data.idToken, expirationTime)
           })
         navigate("/")
       }
