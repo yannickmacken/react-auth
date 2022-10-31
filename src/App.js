@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Switch, Route } from 'react-router-dom';
+import { Navigate, Route, Routes } from 'react-router-dom';
 
 import Layout from './components/Layout/Layout';
 import UserProfile from './components/Profile/UserProfile';
@@ -14,17 +14,14 @@ function App() {
   return (
     <TokenContext.Provider value={[token, setToken]}>
     <Layout>
-      <Switch>
-        <Route path='/' exact>
-          <HomePage />
-        </Route>
-        <Route path='/auth'>
-          <AuthPage />
-        </Route>
-        <Route path='/profile'>
-          <UserProfile />
-        </Route>
-      </Switch>
+      <Routes>
+        <Route path='/' exact element={<HomePage />}/>
+        <Route path='/auth' element={<AuthPage />}/>
+        {token && 
+          <Route path='/profile' element={<UserProfile />}/>
+        }
+        <Route path='*' element={<Navigate to="/" replace/>} />
+      </Routes>
     </Layout>
     </TokenContext.Provider>
   );

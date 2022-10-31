@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useContext } from 'react';
 
 import TokenContext from '../../store/context';
@@ -8,6 +8,15 @@ const MainNavigation = () => {
   
   // Get auth context token
   const [token, setToken] = useContext(TokenContext)
+
+  // Navigate
+  let navigate = useNavigate()
+
+  // On logout, set token to empty string and navigate home
+  function handleClickLogout() {
+    setToken('')
+    navigate('/')
+  }
 
   return (
     <header className={classes.header}>
@@ -21,7 +30,7 @@ const MainNavigation = () => {
                 <Link to='/profile'>Profile</Link>
               </li>
               <li>
-                <button>Logout</button>
+                <button onClick={handleClickLogout}>Logout</button>
               </li>
             </ul>
             :

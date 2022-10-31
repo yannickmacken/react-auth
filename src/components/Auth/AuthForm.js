@@ -1,17 +1,25 @@
 import { useState, useRef, useContext } from 'react';
+import { useNavigate } from 'react-router-dom'
 
 import classes from './AuthForm.module.css';
 import TokenContext from '../../store/context'
 
 
 const AuthForm = () => {
+
+  // User input refs
   const emailInputRef = useRef()
   const passwordInputRef = useRef()
 
+  // Auth context
   const [token, setToken] = useContext(TokenContext)
 
+  // States
   const [isLogin, setIsLogin] = useState(true)
   const [isLoading, setIsLoading] = useState(false)
+
+  // UseNavigate
+  let navigate = useNavigate(); // Need to upgrade react router dom!
 
   const switchAuthModeHandler = () => {
     setIsLogin((prevState) => !prevState);
@@ -50,20 +58,23 @@ const AuthForm = () => {
       }
     ).then(res => {
 
-      // Log result
+      // Log result, if unsucessfull, return
       if (res.ok) {
         console.log('succes')
       } else {
         console.log('failure')
+        setIsLoading(false)
+        return null
       }
 
-      // Set token if login selected
+      // Set token if login selected and navigate home
       if (isLogin) {
         res.json().then(
           (data) => {
             setToken(data.idToken)
             console.log(data.idToken)
           })
+        navigate("/")
       }
 
       // Set is loading state to false
